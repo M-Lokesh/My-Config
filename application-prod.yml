@@ -1,0 +1,16 @@
+# Production environment common settings
+eureka:
+  instance:
+    prefer-ip-address: false
+    hostname: prod-server.example.com
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://prod-eureka-server:8761/eureka/
+
+# Minimal logging in prod
+logging:
+  level:
+    root: WARN
+    org.springframework: INFO
