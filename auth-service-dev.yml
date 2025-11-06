@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 5000  # Longer timeout for dev
+            read-timeout: 5000
+      circuitbreaker:
+        enabled: true
+
+# Detailed logging for development
+logging:
+  level:
+    com.yourpackage.authservice: DEBUG
+    org.springframework.cloud.openfeign: DEBUG
+    io.github.resilience4j.circuitbreaker: DEBUG
+
+# Dev-specific settings
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # Expose all actuator endpoints in dev
