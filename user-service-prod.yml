@@ -1,0 +1,14 @@
+server:
+  port: 8081
+
+# Production logging
+logging:
+  level:
+    com.yourpackage.userservice: WARN
+
+# Prod database (example)
+# spring:
+#   datasource:
+#     url: jdbc:mysql://prod-db-server:3306/users_prod
+#     username: prod_user
+#     password: ${DB_PASSWORD}  # From environment variable
