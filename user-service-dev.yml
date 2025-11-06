@@ -1,0 +1,14 @@
+server:
+  port: 8081
+
+# Dev logging
+logging:
+  level:
+    com.yourpackage.userservice: DEBUG
+
+# Dev database (example)
+# spring:
+#   datasource:
+#     url: jdbc:mysql://localhost:3306/users_dev
+#     username: dev_user
+#     password: dev_pass
