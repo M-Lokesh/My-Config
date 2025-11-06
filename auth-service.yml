@@ -1,0 +1,18 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 3000
+            read-timeout: 3000
+      circuitbreaker:
+        enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.openfeign: DEBUG
+    io.github.resilience4j.circuitbreaker: DEBUG
