@@ -1,0 +1,26 @@
+server:
+  port: 8080
+
+spring:
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 2000  # Strict timeout for prod
+            read-timeout: 2000
+      circuitbreaker:
+        enabled: true
+
+# Minimal logging for production
+logging:
+  level:
+    com.yourpackage.authservice: WARN
+    org.springframework.cloud.openfeign: WARN
+
+# Prod security - expose only health
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
