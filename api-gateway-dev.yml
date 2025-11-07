@@ -103,9 +103,9 @@ resilience4j:
 # Logging
 logging:
   level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty: DEBUG
-    com.yourpackage.gateway: DEBUG
+    org.springframework.cloud.gateway: INFO
+    reactor.netty: INFO
+    com.lokesh.gatewayserver: INFO
 
 # Actuator
 management:
