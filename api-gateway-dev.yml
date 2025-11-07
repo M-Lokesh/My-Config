@@ -18,7 +18,7 @@ spring:
           predicates:
             - Path=/myapp/api/v1/auth/**
           filters:
-            - StripPrefix=1  # Remove /auth from path before forwarding
+            - StripPrefix=2  # Remove /auth from path before forwarding
             - name: CircuitBreaker
               args:
                 name: authServiceCircuitBreaker
@@ -30,7 +30,7 @@ spring:
           predicates:
             - Path=/myapp/api/v1/users/**
           filters:
-            - StripPrefix=1
+            - StripPrefix=2
             - name: CircuitBreaker
               args:
                 name: userServiceCircuitBreaker
