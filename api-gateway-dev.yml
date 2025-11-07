@@ -16,9 +16,9 @@ spring:
         - id: auth-service
           uri: lb://auth-service  # lb = load balanced via Eureka
           predicates:
-            - Path=/myapp/api/v1/auth/**
+            - Path=/api/v1/auth/**
           filters:
-            - StripPrefix=2  # Remove /auth from path before forwarding
+            - StripPrefix=1  # Remove /auth from path before forwarding
             - name: CircuitBreaker
               args:
                 name: authServiceCircuitBreaker
@@ -28,9 +28,9 @@ spring:
         - id: user-service
           uri: lb://user-service
           predicates:
-            - Path=/myapp/api/v1/users/**
+            - Path=/api/v1/users/**
           filters:
-            - StripPrefix=2
+            - StripPrefix=1
             - name: CircuitBreaker
               args:
                 name: userServiceCircuitBreaker
