@@ -93,9 +93,9 @@ resilience4j:
         failure-rate-threshold: 50
 
 # Timeout configuration
-spring:
-  cloud:
-    gateway:
+# spring:
+#   cloud:
+#     gateway:
       httpclient:
         connect-timeout: 3000  # 3 seconds
         response-timeout: 5s   # 5 seconds
@@ -112,7 +112,7 @@ management:
   endpoints:
     web:
       exposure:
-        include: gateway,health,info,refresh,bus-refresh
+        include: "*"
   endpoint:
     gateway:
       enabled: true
