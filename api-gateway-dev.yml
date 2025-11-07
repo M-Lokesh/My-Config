@@ -1,0 +1,118 @@
+server:
+  port: 8762
+
+spring:
+  cloud:
+    gateway:
+      # Enable discovery locator (automatic routing based on Eureka)
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+      
+      # Manual route definitions (more control)
+      routes:
+        # Route 1: Auth Service
+        - id: auth-service
+          uri: lb://auth-service  # lb = load balanced via Eureka
+          predicates:
+            - Path=/auth/**
+          filters:
+            - StripPrefix=1  # Remove /auth from path before forwarding
+            - name: CircuitBreaker
+              args:
+                name: authServiceCircuitBreaker
+                fallbackUri: forward:/fallback/auth
+        
+        # Route 2: User Service
+        - id: user-service
+          uri: lb://user-service
+          predicates:
+            - Path=/users/**
+          filters:
+            - StripPrefix=1
+            - name: CircuitBreaker
+              args:
+                name: userServiceCircuitBreaker
+                fallbackUri: forward:/fallback/users
+        
+        # Route 3: Auth Service - Login (specific endpoint)
+        - id: auth-login
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/login
+            - Method=POST
+          filters:
+            - RewritePath=/api/login, /login
+        
+        # Route 4: Auth Service - Register
+        - id: auth-register
+          uri: lb://auth-service
+          predicates:
+            - Path=/api/register
+            - Method=POST
+          filters:
+            - RewritePath=/api/register, /register
+
+      # Global CORS configuration
+      globalcors:
+        cors-configurations:
+          '[/**]':
+            allowed-origins: 
+              - "http://localhost:3000"
+              - "http://localhost:4200"
+            allowed-methods:
+              - GET
+              - POST
+              - PUT
+              - DELETE
+              - OPTIONS
+            allowed-headers: "*"
+            allow-credentials: true
+            max-age: 3600
+
+# Resilience4j Circuit Breaker
+resilience4j:
+  circuitbreaker:
+    instances:
+      authServiceCircuitBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+        automatic-transition-from-open-to-half-open-enabled: true
+      
+      userServiceCircuitBreaker:
+        register-health-indicator: true
+        sliding-window-size: 10
+        minimum-number-of-calls: 5
+        permitted-number-of-calls-in-half-open-state: 3
+        wait-duration-in-open-state: 10s
+        failure-rate-threshold: 50
+
+# Timeout configuration
+spring:
+  cloud:
+    gateway:
+      httpclient:
+        connect-timeout: 3000  # 3 seconds
+        response-timeout: 5s   # 5 seconds
+
+# Logging
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty: DEBUG
+    com.yourpackage.gateway: DEBUG
+
+# Actuator
+management:
+  endpoints:
+    web:
+      exposure:
+        include: gateway,health,info,refresh,bus-refresh
+  endpoint:
+    gateway:
+      enabled: true
